@@ -92,7 +92,7 @@ stim_process: PROCESS
 		"01000100" -- 'D'
 	);
 
-	TYPE multi_comment_test_array_2 IS ARRAY (0 TO 15) OF std_logic_vector(7 downto 0);
+	TYPE multi_comment_test_array_2 IS ARRAY (0 TO 16) OF std_logic_vector(7 downto 0);
 	CONSTANT m_test_vectors_2 : multi_comment_test_array_2 := (
 		SLASH_CHARACTER, -- '/'
 		STAR_CHARACTER, -- '*'
@@ -113,7 +113,7 @@ stim_process: PROCESS
 		"01000101" -- 'E'
 	);
 
-	TYPE mixed_comment_test_array IS ARRAY (0 TO 19) OF std_logic_vector(7 downto 0);
+	TYPE mixed_comment_test_array IS ARRAY (0 TO 18) OF std_logic_vector(7 downto 0);
 	CONSTANT mix_test_vectors : mixed_comment_test_array := (
 		"01000001", -- 'A'
 		SLASH_CHARACTER, -- '/'
@@ -133,8 +133,7 @@ stim_process: PROCESS
 		"01000101", -- 'E'
 		STAR_CHARACTER, -- '*'
 		SLASH_CHARACTER, -- '/'
-		"01000110", -- 'F'
-		"01000111"  -- 'G'
+		"01000110" -- 'F'
 	);
 
 	TYPE singel_answer_1 IS ARRAY (0 TO 5) OF STD_LOGIC;
@@ -185,7 +184,7 @@ stim_process: PROCESS
 		'1'  -- 'D'
 	);
 
-	TYPE multi_answer_2 IS ARRAY (0 TO 15) OF STD_LOGIC;
+	TYPE multi_answer_2 IS ARRAY (0 TO 16) OF STD_LOGIC;
 	CONSTANT m_answer_2 : multi_answer_2 := (
 		'0', -- '/'
 		'0', -- '*'
@@ -206,7 +205,7 @@ stim_process: PROCESS
 		'0'  -- 'E'
 	);
 
-	TYPE mixed_answer IS ARRAY (0 TO 19) OF STD_LOGIC;
+	TYPE mixed_answer IS ARRAY (0 TO 18) OF STD_LOGIC;
 	CONSTANT mix_answer : mixed_answer := (
 		'0', -- 'A'
 		'0', -- '/'
