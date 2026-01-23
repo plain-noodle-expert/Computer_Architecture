@@ -239,10 +239,9 @@ BEGIN
 	FOR i IN s_test_vectors_1'RANGE LOOP
 		s_input <= s_test_vectors_1(i);
 		WAIT FOR 1 * clk_period;
-		IF s_output /= s_answer_1(i) THEN
+		ASSERT (s_output = s_answer_1(i))
 			REPORT "Test case 1 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
-		END IF;
 	END LOOP;
 
 	s_reset <= '1';
@@ -254,10 +253,9 @@ BEGIN
 	FOR i IN s_test_vectors_2'RANGE LOOP
 		s_input <= s_test_vectors_2(i);
 		WAIT FOR 1 * clk_period;
-		IF s_output /= s_answer_2(i) THEN
+		ASSERT (s_output = s_answer_2(i))
 			REPORT "Test case 2 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
-		END IF;
 	END LOOP;
 
 	s_reset <= '1';
@@ -269,10 +267,9 @@ BEGIN
 	FOR i IN s_test_vectors_3'RANGE LOOP
 		s_input <= s_test_vectors_3(i);
 		WAIT FOR 1 * clk_period;
-		IF s_output /= s_answer_3(i) THEN
+		ASSERT (s_output = s_answer_3(i))
 			REPORT "Test case 3 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
-		END IF;
 	END LOOP;
 
 	s_reset <= '1';
@@ -284,10 +281,9 @@ BEGIN
 	FOR i IN m_test_vectors_1'RANGE LOOP
 		s_input <= m_test_vectors_1(i);
 		WAIT FOR 1 * clk_period;
-		IF s_output /= m_answer_1(i) THEN
+		ASSERT (s_output = m_answer_1(i))
 			REPORT "Test case 4 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
-		END IF;
 	END LOOP;
 
 	s_reset <= '1';
@@ -299,10 +295,9 @@ BEGIN
 	FOR i IN m_test_vectors_2'RANGE LOOP
 		s_input <= m_test_vectors_2(i);
 		WAIT FOR 1 * clk_period;
-		IF s_output /= m_answer_2(i) THEN
+		ASSERT (s_output = m_answer_2(i))
 			REPORT "Test case 5 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
-		END IF;
 	END LOOP;
 
 	s_reset <= '1';
@@ -314,10 +309,9 @@ BEGIN
 	FOR i IN mix_test_vectors'RANGE LOOP
 		s_input <= mix_test_vectors(i);
 		WAIT FOR 1 * clk_period;
-		IF s_output /= mix_answer(i) THEN
+		ASSERT (s_output = mix_answer(i))
 			REPORT "Test case 6 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
-		END IF;
 	END LOOP;
 
 	WAIT;
