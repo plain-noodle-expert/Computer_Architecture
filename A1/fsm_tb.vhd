@@ -245,6 +245,11 @@ BEGIN
 		END IF;
 	END LOOP;
 
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
+	WAIT FOR clk_period*1;
+	
 	REPORT "Start Test Case 2: Single Line Comments with interleaved code";
 	FOR i IN s_test_vectors_2'RANGE LOOP
 		s_input <= s_test_vectors_2(i);
@@ -254,6 +259,11 @@ BEGIN
 			SEVERITY ERROR;
 		END IF;
 	END LOOP;
+
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
+	WAIT FOR clk_period*1;
 
 	REPORT "Start Test Case 3: Single Line Comments";
 	FOR i IN s_test_vectors_3'RANGE LOOP
@@ -265,6 +275,11 @@ BEGIN
 		END IF;
 	END LOOP;
 
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
+	WAIT FOR clk_period*1;
+
 	REPORT "Start Test Case 4: Multi-Line Comments with interleaved code";
 	FOR i IN m_test_vectors_1'RANGE LOOP
 		s_input <= m_test_vectors_1(i);
@@ -275,6 +290,11 @@ BEGIN
 		END IF;
 	END LOOP;
 
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
+	WAIT FOR clk_period*1;
+
 	REPORT "Start Test Case 5: Complex Multi-Line Comments with interleaved code";
 	FOR i IN m_test_vectors_2'RANGE LOOP
 		s_input <= m_test_vectors_2(i);
@@ -284,6 +304,11 @@ BEGIN
 			SEVERITY ERROR;
 		END IF;
 	END LOOP;
+
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
+	WAIT FOR clk_period*1;
 
 	REPORT "Start Test Case 6: Mixed Comments";
 	FOR i IN mix_test_vectors'RANGE LOOP
