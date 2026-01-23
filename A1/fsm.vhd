@@ -17,7 +17,15 @@ architecture behavioral of comments_fsm is
 constant SLASH_CHARACTER : std_logic_vector(7 downto 0) := "00101111";
 constant STAR_CHARACTER : std_logic_vector(7 downto 0) := "00101010";
 constant NEW_LINE_CHARACTER : std_logic_vector(7 downto 0) := "00001010";
-TYPE state_type IS (IDLE, READY, SINGLE_C, SINGLE_END, MULTI_C, MULTI_C_END);
+-- IDLE (A)
+-- READY (B)
+-- SINGLE_READY (C)
+-- SINGLE_C (E, inside single-line comment)
+-- MULTI_READY (D)
+-- MULTI_C (G, inside multi-line comment)
+-- MULTI_END_READY (H)
+-- END_C (F, end of comment but still output 1)
+TYPE state_type IS (IDLE, READY, SINGLE_READY, SINGLE_C, MULTI_READY, MULTI_C, MULTI_END_READY, END_C);
 SIGNAL state : state_type;
 
 begin
@@ -31,39 +39,49 @@ begin
         case state is
             when IDLE =>
                 if input = SLASH_CHARACTER then
-                    state <= READY;
+                    state <= READY; -- A -> B
                 else
                     state <= IDLE;
                 end if;
             when READY => -- One '/' detected
                 if input = SLASH_CHARACTER then
-                    state <= SINGLE_C; -- Single-line comment start
+                    state <= SINGLE_READY; -- Single-line comment start
                 elsif input = STAR_CHARACTER then
-                    state <= MULTI_C ; -- Multi-line comment start
+                    state <= MULTI_READY ; -- Multi-line comment start
                 else
                     state <= IDLE; -- Not a comment
                 end if;
-            when SINGLE_C => -- Inside single-line comment
+            when SINGLE_READY => -- C, double '/' detected
                 if input = NEW_LINE_CHARACTER then
-                    state <= SINGLE_END;
+                    state <= END_C; -- F
                 else
-                    state <= SINGLE_C; -- Still inside single-line comment
+                    state <= SINGLE_C; -- E, Still inside single-line comment
                 end if;
-            when SINGLE_END => -- End of single-line comment
-                state <= IDLE;
-            when MULTI_C => -- Inside multi-line comment
+            when MULTI_READY => -- D, '/*' detected
                 if input = STAR_CHARACTER then
-                    state <= MULTI_C_END;
+                    state <= MULTI_END_READY; -- H, possible end of multi-line comment
                 else
-                    state <= MULTI_C; -- Still inside multi-line comment
+                    state <= MULTI_C; -- G, Still inside multi-line comment
                 end if;
-            when MULTI_C_END => -- End '*' detected in multi-line comment
-                if input = SLASH_CHARACTER then
-                    state <= IDLE; -- End of multi-line comment
-                elsif input = STAR_CHARACTER then
-                    state <= MULTI_C_END;
+            when MULTI_C => -- G, inside multi-line comment
+                if input = STAR_CHARACTER then
+                    state <= MULTI_END_READY; -- H, possible end of multi-line comment
                 else
-                    state <= MULTI_C; -- Still inside multi-line comment
+                    state <= MULTI_C; -- G, Still inside multi-line comment
+                end if;
+            when MULTI_END_READY => -- H, possible end of multi-line comment
+                if input = SLASH_CHARACTER then
+                    state <= END_C; -- F, End of comment
+                elsif input = STAR_CHARACTER then
+                    state <= MULTI_END_READY; -- Still possible end
+                else
+                    state <= MULTI_C; -- G, Back to inside multi-line comment
+                end if;
+            when END_C => -- End of single-line comment
+                if input = SLASH_CHARACTER then
+                    state <= READY; -- Check for new comment start
+                else
+                    state <= IDLE; -- Back to idle
                 end if;
         end case;
     end if;
@@ -77,8 +95,10 @@ begin
             output <= '1'; -- Inside single-line comment
         when MULTI_C =>
             output <= '1'; -- Inside multi-line comment
-        when MULTI_C_END =>
+        when MULTI_END_READY =>
             output <= '1'; -- Still inside multi-line comment
+        when END_C =>
+            output <= '1'; -- End of a comment but still output 1
         when others =>
             output <= '0'; -- Not in a comment
     end case;
