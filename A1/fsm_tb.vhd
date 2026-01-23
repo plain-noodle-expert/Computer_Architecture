@@ -220,42 +220,39 @@ BEGIN
 	REPORT "Resetting the FSM";
 	s_reset <= '1';
 	WAIT FOR clk_period*1;
-	s_reset <= '0';
-	WAIT FOR clk_period*1;
 	ASSERT (s_output = '0')
 		REPORT "Reset failed"
 		SEVERITY ERROR;
+	s_reset <= '0';
 
-	-- REPORT "Start Test Case 1: Single Line Comments";
-	-- FOR i IN test_vectors_1'RANGE LOOP
-	-- 	s_input <= test_vectors_1(i);
-	-- 	WAIT FOR 1 * clk_period;
-	-- 	ASSERT (s_output = answer_1(i))
-	-- 		REPORT "Test case 1 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_1(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
-	-- 		SEVERITY ERROR;
-	-- END LOOP;
+	REPORT "Start Test Case 1: Single Line Comments";
+	FOR i IN test_vectors_1'RANGE LOOP
+		s_input <= test_vectors_1(i);
+		WAIT FOR 1 * clk_period;
+		ASSERT (s_output = answer_1(i))
+			REPORT "Test case 1 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_1(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
+			SEVERITY ERROR;
+	END LOOP;
 
-	-- s_reset <= '1';
-	-- WAIT FOR clk_period*1;
-	-- s_reset <= '0';
-	-- WAIT FOR clk_period*1;
-	-- ASSERT (s_output = '0')
-	-- 	REPORT "Reset failed after test case 1"
-	-- 	SEVERITY ERROR;
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	ASSERT (s_output = '0')
+		REPORT "Reset failed after test case 1"
+		SEVERITY ERROR;
+	s_reset <= '0';
 
-	-- REPORT "Start Test Case 2: Single Line Comments with interleaved code";
-	-- FOR i IN test_vectors_2'RANGE LOOP
-	-- 	s_input <= test_vectors_2(i);
-	-- 	WAIT FOR 1 * clk_period;
-	-- 	ASSERT (s_output = answer_2(i))
-	-- 		REPORT "Test case 2 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_2(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
-	-- 		SEVERITY ERROR;
-	-- END LOOP;
+	REPORT "Start Test Case 2: Single Line Comments with interleaved code";
+	FOR i IN test_vectors_2'RANGE LOOP
+		s_input <= test_vectors_2(i);
+		WAIT FOR 1 * clk_period;
+		ASSERT (s_output = answer_2(i))
+			REPORT "Test case 2 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_2(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
+			SEVERITY ERROR;
+	END LOOP;
 
-	-- s_reset <= '1';
-	-- WAIT FOR clk_period*1;
-	-- s_reset <= '0';
-	-- WAIT FOR clk_period*1;
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
 
 	REPORT "Start Test Case 3: Single Line Comments";
 	FOR i IN test_vectors_3'RANGE LOOP
@@ -266,61 +263,57 @@ BEGIN
 			SEVERITY ERROR;
 	END LOOP;
 
-	-- s_reset <= '1';
-	-- WAIT FOR clk_period*1;
-	-- s_reset <= '0';
-	-- WAIT FOR clk_period*1;
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
 
-	-- REPORT "Start Test Case 4: Multi-Line Comments with interleaved code";
-	-- FOR i IN test_vectors_4'RANGE LOOP
-	-- 	s_input <= test_vectors_4(i);
-	-- 	WAIT FOR 1 * clk_period;
-	-- 	ASSERT (s_output = answer_4(i))
-	-- 		REPORT "Test case 4 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_4(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
-	-- 		SEVERITY ERROR;
-	-- END LOOP;
+	REPORT "Start Test Case 4: Multi-Line Comments with interleaved code";
+	FOR i IN test_vectors_4'RANGE LOOP
+		s_input <= test_vectors_4(i);
+		WAIT FOR 1 * clk_period;
+		ASSERT (s_output = answer_4(i))
+			REPORT "Test case 4 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_4(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
+			SEVERITY ERROR;
+	END LOOP;
 
-	-- s_reset <= '1';
-	-- WAIT FOR clk_period*1;
-	-- s_reset <= '0';
-	-- WAIT FOR clk_period*1;
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
 
-	-- REPORT "Start Test Case 5: Complex Multi-Line Comments with interleaved code";
-	-- FOR i IN test_vectors_5'RANGE LOOP
-	-- 	s_input <= test_vectors_5(i);
-	-- 	WAIT FOR 1 * clk_period;
-	-- 	ASSERT (s_output = answer_5(i))
-	-- 		REPORT "Test case 5 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_5(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
-	-- 		SEVERITY ERROR;
-	-- END LOOP;
+	REPORT "Start Test Case 5: Complex Multi-Line Comments with interleaved code";
+	FOR i IN test_vectors_5'RANGE LOOP
+		s_input <= test_vectors_5(i);
+		WAIT FOR 1 * clk_period;
+		ASSERT (s_output = answer_5(i))
+			REPORT "Test case 5 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_5(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
+			SEVERITY ERROR;
+	END LOOP;
 
-	-- s_reset <= '1';
-	-- WAIT FOR clk_period*1;
-	-- s_reset <= '0';
-	-- WAIT FOR clk_period*1;
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
 
-	-- REPORT "Start Test Case 6: Mixed Comments";
-	-- FOR i IN test_vectors_6'RANGE LOOP
-	-- 	s_input <= test_vectors_6(i);
-	-- 	WAIT FOR 1 * clk_period;
-	-- 	ASSERT (s_output = answer_6(i))
-	-- 		REPORT "Test case 6 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_6(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
-	-- 		SEVERITY ERROR;
-	-- END LOOP;
+	REPORT "Start Test Case 6: Mixed Comments";
+	FOR i IN test_vectors_6'RANGE LOOP
+		s_input <= test_vectors_6(i);
+		WAIT FOR 1 * clk_period;
+		ASSERT (s_output = answer_6(i))
+			REPORT "Test case 6 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_6(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
+			SEVERITY ERROR;
+	END LOOP;
 
-	-- s_reset <= '1';
-	-- WAIT FOR clk_period*1;
-	-- s_reset <= '0';
-	-- WAIT FOR clk_period*1;
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
 
-	-- REPORT "Start Test Case 7: Multi-Line Comment followed by Single-Line Comment";
-	-- FOR i IN test_vectors_7'RANGE LOOP
-	-- 	s_input <= test_vectors_7(i);
-	-- 	WAIT FOR 1 * clk_period;
-	-- 	ASSERT (s_output = answer_7(i))
-	-- 		REPORT "Test case 7 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_7(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
-	-- 		SEVERITY ERROR;
-	-- END LOOP;
+	REPORT "Start Test Case 7: Multi-Line Comment followed by Single-Line Comment";
+	FOR i IN test_vectors_7'RANGE LOOP
+		s_input <= test_vectors_7(i);
+		WAIT FOR 1 * clk_period;
+		ASSERT (s_output = answer_7(i))
+			REPORT "Test case 7 failed at index " & INTEGER'IMAGE(i) & " Expected: " & STD_LOGIC'IMAGE(answer_7(i)) & " Got: " & STD_LOGIC'IMAGE(s_output)
+			SEVERITY ERROR;
+	END LOOP;
 
 	WAIT;
 END PROCESS stim_process;
