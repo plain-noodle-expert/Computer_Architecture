@@ -24,6 +24,7 @@ CONSTANT SLASH_CHARACTER : std_logic_vector(7 downto 0) := "00101111";
 CONSTANT STAR_CHARACTER : std_logic_vector(7 downto 0) := "00101010";
 CONSTANT NEW_LINE_CHARACTER : std_logic_vector(7 downto 0) := "00001010";
 
+
 BEGIN
 dut: comments_fsm
 PORT MAP(clk, s_reset, s_input, s_output);
@@ -39,10 +40,194 @@ END PROCESS;
 
 --TODO: Thoroughly test your FSM
 stim_process: PROCESS
-	VARIABLE potential_comment : BOOLEAN := FALSE;
 	VARIABLE single_comment : BOOLEAN := FALSE;
 	VARIABLE multi_comment : BOOLEAN := FALSE;
+	VARIABLE potential_comment : BOOLEAN := FALSE;
 	VARIABLE potential_end_multi_comment : BOOLEAN := FALSE;
+	TYPE singel_comment_test_array_1 IS ARRAY (0 TO 5) OF std_logic_vector(7 downto 0);
+	CONSTANT s_test_vectors_1 : singel_comment_test_array_1 := (
+		SLASH_CHARACTER, -- '/'
+		SLASH_CHARACTER, -- '/'
+		"01000001", -- 'A'
+		"01000010", -- 'B'
+		NEW_LINE_CHARACTER, -- '\n'
+		"01000011" -- 'C'
+	);
+
+	TYPE single_comment_test_array_2 IS ARRAY (0 TO 7) OF std_logic_vector(7 downto 0);
+	CONSTANT s_test_vectors_2 : single_comment_test_array_2 := (
+		"01000001", -- 'A'
+		SLASH_CHARACTER, -- '/'
+		"01000010", -- 'B'
+		SLASH_CHARACTER, -- '/'
+		SLASH_CHARACTER, -- '/'
+		"01000011", -- 'C'
+		NEW_LINE_CHARACTER, -- '\n'
+		"01000100" -- 'D'
+	);
+
+	TYPE single_comment_test_array_3 IS ARRAY (0 TO 7) OF std_logic_vector(7 downto 0);
+	CONSTANT s_test_vectors_3 : single_comment_test_array_3 := (
+		SLASH_CHARACTER, -- '/'
+		SLASH_CHARACTER, -- '/'
+		STAR_CHARACTER, -- '*'
+		"01000001", -- 'A'
+		STAR_CHARACTER, -- '*'
+		SLASH_CHARACTER, -- '/'
+		NEW_LINE_CHARACTER, -- '\n'
+		"01000010" -- 'B'
+	);
+
+	TYPE multi_comment_test_array_1 IS ARRAY (0 TO 9) OF std_logic_vector(7 downto 0);
+	CONSTANT m_test_vectors_1 : multi_comment_test_array_1 := (
+		"01000001", -- 'A'
+		SLASH_CHARACTER, -- '/'
+		STAR_CHARACTER, -- '*'
+		"01000010", -- 'B'
+		STAR_CHARACTER, -- '*'
+		SLASH_CHARACTER, -- '/'
+		"01000011", -- 'C'
+		SLASH_CHARACTER, -- '/'
+		STAR_CHARACTER, -- '*'
+		"01000100" -- 'D'
+	);
+
+	TYPE multi_comment_test_array_2 IS ARRAY (0 TO 15) OF std_logic_vector(7 downto 0);
+	CONSTANT m_test_vectors_2 : multi_comment_test_array_2 := (
+		SLASH_CHARACTER, -- '/'
+		STAR_CHARACTER, -- '*'
+		NEW_LINE_CHARACTER, -- '\n'
+		"01000001", -- 'A'
+		STAR_CHARACTER, -- '*'
+		SLASH_CHARACTER, -- '/'
+		SLASH_CHARACTER, -- '/'
+		"01000010", -- 'B'
+		STAR_CHARACTER, -- '*'
+		"01000011", -- 'C'
+		STAR_CHARACTER, -- '*'
+		SLASH_CHARACTER, -- '/'
+		STAR_CHARACTER, -- '*'
+		"01000100", -- 'D'
+		STAR_CHARACTER, -- '*'
+		SLASH_CHARACTER, -- '/'
+		"01000101" -- 'E'
+	);
+
+	TYPE mixed_comment_test_array IS ARRAY (0 TO 19) OF std_logic_vector(7 downto 0);
+	CONSTANT mix_test_vectors : mixed_comment_test_array := (
+		"01000001", -- 'A'
+		SLASH_CHARACTER, -- '/'
+		SLASH_CHARACTER, -- '/'
+		"01000010", -- 'B'
+		NEW_LINE_CHARACTER, -- '\n'
+		SLASH_CHARACTER, -- '/'
+		STAR_CHARACTER, -- '*'
+		"01000011", -- 'C'
+		STAR_CHARACTER, -- '*'
+		SLASH_CHARACTER, -- '/'
+		SLASH_CHARACTER, -- '/'
+		"01000100", -- 'D'
+		NEW_LINE_CHARACTER, -- '\n'
+		SLASH_CHARACTER, -- '/'
+		STAR_CHARACTER, -- '*'
+		"01000101", -- 'E'
+		STAR_CHARACTER, -- '*'
+		SLASH_CHARACTER, -- '/'
+		"01000110", -- 'F'
+		"01000111"  -- 'G'
+	);
+
+	TYPE singel_answer_1 IS ARRAY (0 TO 5) OF STD_LOGIC;
+	CONSTANT s_answer_1 : singel_answer_1 := (
+		'0', -- '/'
+		'0', -- '/'
+		'1', -- 'A'
+		'1', -- 'B'
+		'1', -- '\n'
+		'0'  -- 'C'
+	);
+
+	TYPE singel_answer_2 IS ARRAY (0 TO 7) OF STD_LOGIC;
+	CONSTANT s_answer_2 : singel_answer_2 := (
+		'0', -- 'A'
+		'0', -- '/'
+		'0', -- 'B'
+		'0', -- '/'
+		'0', -- '/'
+		'1', -- 'C'
+		'1', -- '\n'
+		'0'  -- 'D'
+	);
+
+	TYPE singel_answer_3 IS ARRAY (0 TO 7) OF STD_LOGIC;
+	CONSTANT s_answer_3 : singel_answer_3 := (
+		'0', -- '/'
+		'0', -- '/'
+		'1', -- '*'
+		'1', -- 'A'
+		'1', -- '*'
+		'1', -- '/'
+		'1', -- '\n'
+		'0'  -- 'B'
+	);
+
+	TYPE multi_answer_1 IS ARRAY (0 TO 9) OF STD_LOGIC;
+	CONSTANT m_answer_1 : multi_answer_1 := (
+		'0', -- 'A'
+		'0', -- '/'
+		'0', -- '*'
+		'1', -- 'B'
+		'1', -- '*'
+		'1', -- '/'
+		'0', -- 'C'
+		'0', -- '/'
+		'0', -- '*'
+		'1'  -- 'D'
+	);
+
+	TYPE multi_answer_2 IS ARRAY (0 TO 15) OF STD_LOGIC;
+	CONSTANT m_answer_2 : multi_answer_2 := (
+		'0', -- '/'
+		'0', -- '*'
+		'1', -- '\n'
+		'1', -- 'A'
+		'1', -- '*'
+		'1', -- '/'
+		'0', -- '/'
+		'0', -- 'B'
+		'0', -- '*'
+		'0', -- 'C'
+		'0', -- '*'
+		'0', -- '/'
+		'0', -- '*'
+		'1', -- 'D'
+		'1', -- '*'
+		'1', -- '/'
+		'0'  -- 'E'
+	);
+
+	TYPE mixed_answer IS ARRAY (0 TO 19) OF STD_LOGIC;
+	CONSTANT mix_answer : mixed_answer := (
+		'0', -- 'A'
+		'0', -- '/'
+		'0', -- '/'
+		'1', -- 'B'
+		'1', -- '\n'
+		'0', -- '/'
+		'0', -- '*'
+		'1', -- 'C'
+		'1', -- '*'
+		'1', -- '/'
+		'0', -- '/'
+		'0', -- 'D'
+		'0', -- '\n'
+		'0', -- '/'
+		'0', -- '*'
+		'1', -- 'E'
+		'1', -- '*'
+		'1', -- '/'
+		'0'  -- 'F'
+	);
 BEGIN
 -- Reset the FSM
 	REPORT "Resetting the FSM";
@@ -50,48 +235,66 @@ BEGIN
 	WAIT FOR clk_period*1;
 	s_reset <= '0';
 	WAIT FOR clk_period*1;
-	REPORT "Example case, reading a meaningless character";
-	FOR i IN 0 TO 255 LOOP
-	-- 47: slash, 42: star, 10: new line
-		s_input <= std_logic_vector(to_unsigned(i, 8));
+
+	REPORT "Start Test Case 1: Single Line Comments";
+	FOR i IN s_test_vectors_1'RANGE LOOP
+		s_input <= s_test_vectors_1(i);
 		WAIT FOR 1 * clk_period;
-		IF single_comment OR multi_comment THEN
-			ASSERT (s_output = '1') REPORT "When inside a comment, the output should be '1'" SEVERITY ERROR;
-		ELSE
-			ASSERT (s_output = '0') REPORT "When not inside a comment, the output should be '0'" SEVERITY ERROR;
-		END IF;
-		IF single_comment THEN
-			IF i = 10 THEN -- '\n' ends single-line comment
-				potential_comment := FALSE;
-				single_comment := FALSE;
-			END IF;
-		END IF;
-		IF multi_comment THEN
-			IF potential_end_multi_comment THEN
-				IF i = 47 THEN
-					potential_comment := FALSE;
-					multi_comment := FALSE;
-					potential_end_multi_comment := FALSE;
-				ELSIF i = 42 THEN
-					potential_end_multi_comment := FALSE;
-				END IF;
-			ELSIF i = 42 THEN
-				potential_end_multi_comment := TRUE;
-			END IF;
-		END IF;
-		IF potential_comment THEN
-			IF (i = 47)  THEN
-				single_comment := TRUE;
-			ELSIF (i = 42) THEN
-				multi_comment := TRUE;
-			ELSE
-				potential_comment := FALSE;
-			END IF;
-		ELSIF (i = 47) THEN
-			potential_comment := TRUE;
+		IF s_output /= s_answer_1(i) THEN
+			REPORT "Test case 1 failed at index " & INTEGER'IMAGE(i)
+			SEVERITY ERROR;
 		END IF;
 	END LOOP;
-		REPORT "_______________________";
+
+	REPORT "Start Test Case 2: Single Line Comments with interleaved code";
+	FOR i IN s_test_vectors_2'RANGE LOOP
+		s_input <= s_test_vectors_2(i);
+		WAIT FOR 1 * clk_period;
+		IF s_output /= s_answer_2(i) THEN
+			REPORT "Test case 2 failed at index " & INTEGER'IMAGE(i)
+			SEVERITY ERROR;
+		END IF;
+	END LOOP;
+
+	REPORT "Start Test Case 3: Single Line Comments";
+	FOR i IN s_test_vectors_3'RANGE LOOP
+		s_input <= s_test_vectors_3(i);
+		WAIT FOR 1 * clk_period;
+		IF s_output /= s_answer_3(i) THEN
+			REPORT "Test case 3 failed at index " & INTEGER'IMAGE(i)
+			SEVERITY ERROR;
+		END IF;
+	END LOOP;
+
+	REPORT "Start Test Case 4: Multi-Line Comments with interleaved code";
+	FOR i IN m_test_vectors_1'RANGE LOOP
+		s_input <= m_test_vectors_1(i);
+		WAIT FOR 1 * clk_period;
+		IF s_output /= m_answer_1(i) THEN
+			REPORT "Test case 4 failed at index " & INTEGER'IMAGE(i)
+			SEVERITY ERROR;
+		END IF;
+	END LOOP;
+
+	REPORT "Start Test Case 5: Complex Multi-Line Comments with interleaved code";
+	FOR i IN m_test_vectors_2'RANGE LOOP
+		s_input <= m_test_vectors_2(i);
+		WAIT FOR 1 * clk_period;
+		IF s_output /= m_answer_2(i) THEN
+			REPORT "Test case 5 failed at index " & INTEGER'IMAGE(i)
+			SEVERITY ERROR;
+		END IF;
+	END LOOP;
+
+	REPORT "Start Test Case 6: Mixed Comments";
+	FOR i IN mix_test_vectors'RANGE LOOP
+		s_input <= mix_test_vectors(i);
+		WAIT FOR 1 * clk_period;
+		IF s_output /= mix_answer(i) THEN
+			REPORT "Test case 6 failed at index " & INTEGER'IMAGE(i)
+			SEVERITY ERROR;
+		END IF;
+	END LOOP;
 
 	WAIT;
 END PROCESS stim_process;
