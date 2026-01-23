@@ -40,12 +40,9 @@ END PROCESS;
 
 --TODO: Thoroughly test your FSM
 stim_process: PROCESS
-	VARIABLE single_comment : BOOLEAN := FALSE;
-	VARIABLE multi_comment : BOOLEAN := FALSE;
-	VARIABLE potential_comment : BOOLEAN := FALSE;
-	VARIABLE potential_end_multi_comment : BOOLEAN := FALSE;
-	TYPE singel_comment_test_array_1 IS ARRAY (0 TO 5) OF std_logic_vector(7 downto 0);
-	CONSTANT s_test_vectors_1 : singel_comment_test_array_1 := (
+
+	TYPE test_array_1 IS ARRAY (0 TO 5) OF std_logic_vector(7 downto 0);
+	CONSTANT test_vectors_1 : test_array_1 := (
 		SLASH_CHARACTER, -- '/'
 		SLASH_CHARACTER, -- '/'
 		"01000001", -- 'A'
@@ -53,9 +50,18 @@ stim_process: PROCESS
 		NEW_LINE_CHARACTER, -- '\n'
 		"01000011" -- 'C'
 	);
+	TYPE answer_array_1 IS ARRAY (0 TO 5) OF STD_LOGIC;
+	CONSTANT answer_1 : answer_array_1 := (
+		'0', -- '/'
+		'0', -- '/'
+		'1', -- 'A'
+		'1', -- 'B'
+		'1', -- '\n'
+		'0'  -- 'C'
+	);
 
-	TYPE single_comment_test_array_2 IS ARRAY (0 TO 7) OF std_logic_vector(7 downto 0);
-	CONSTANT s_test_vectors_2 : single_comment_test_array_2 := (
+	TYPE test_array_2 IS ARRAY (0 TO 7) OF std_logic_vector(7 downto 0);
+	CONSTANT test_vectors_2 : test_array_2 := (
 		"01000001", -- 'A'
 		SLASH_CHARACTER, -- '/'
 		"01000010", -- 'B'
@@ -63,58 +69,87 @@ stim_process: PROCESS
 		SLASH_CHARACTER, -- '/'
 		"01000011", -- 'C'
 		NEW_LINE_CHARACTER, -- '\n'
-		"01000100" -- 'D'
+		SLASH_CHARACTER -- '/'
+	);
+	TYPE answer_array_2 IS ARRAY (0 TO 7) OF STD_LOGIC;
+	CONSTANT answer_2 : answer_array_2 := (
+		'0', -- 'A'
+		'0', -- '/'
+		'0', -- 'B'
+		'0', -- '/'
+		'0', -- '/'
+		'1', -- 'C'
+		'1', -- '\n'
+		'0'  -- '/'
 	);
 
-	TYPE single_comment_test_array_3 IS ARRAY (0 TO 7) OF std_logic_vector(7 downto 0);
-	CONSTANT s_test_vectors_3 : single_comment_test_array_3 := (
+	TYPE test_array_3 IS ARRAY (0 TO 3) OF std_logic_vector(7 downto 0);
+	CONSTANT test_vectors_3 : test_array_3 := (
 		SLASH_CHARACTER, -- '/'
-		SLASH_CHARACTER, -- '/'
-		STAR_CHARACTER, -- '*'
-		"01000001", -- 'A'
-		STAR_CHARACTER, -- '*'
 		SLASH_CHARACTER, -- '/'
 		NEW_LINE_CHARACTER, -- '\n'
-		"01000010" -- 'B'
+		"01000001" -- 'A'
+	);
+	TYPE answer_array_3 IS ARRAY (0 TO 3) OF STD_LOGIC;
+	CONSTANT answer_3 : answer_array_3 := (
+		'0', -- '/'
+		'0', -- '/'
+		'1', -- '\n'
+		'0'  -- 'A'
 	);
 
-	TYPE multi_comment_test_array_1 IS ARRAY (0 TO 9) OF std_logic_vector(7 downto 0);
-	CONSTANT m_test_vectors_1 : multi_comment_test_array_1 := (
-		"01000001", -- 'A'
+	TYPE test_array_4 IS ARRAY (0 TO 13) OF std_logic_vector(7 downto 0);
+	CONSTANT test_vectors_4 : test_array_4 := (
 		SLASH_CHARACTER, -- '/'
 		STAR_CHARACTER, -- '*'
 		"01000010", -- 'B'
 		STAR_CHARACTER, -- '*'
 		SLASH_CHARACTER, -- '/'
-		"01000011", -- 'C'
 		SLASH_CHARACTER, -- '/'
 		STAR_CHARACTER, -- '*'
-		"01000100" -- 'D'
-	);
-
-	TYPE multi_comment_test_array_2 IS ARRAY (0 TO 16) OF std_logic_vector(7 downto 0);
-	CONSTANT m_test_vectors_2 : multi_comment_test_array_2 := (
-		SLASH_CHARACTER, -- '/'
 		STAR_CHARACTER, -- '*'
-		NEW_LINE_CHARACTER, -- '\n'
-		"01000001", -- 'A'
-		STAR_CHARACTER, -- '*'
-		SLASH_CHARACTER, -- '/'
-		SLASH_CHARACTER, -- '/'
-		"01000010", -- 'B'
-		STAR_CHARACTER, -- '*'
-		"01000011", -- 'C'
-		STAR_CHARACTER, -- '*'
-		SLASH_CHARACTER, -- '/'
 		STAR_CHARACTER, -- '*'
 		"01000100", -- 'D'
-		STAR_CHARACTER, -- '*'
+		NEW_LINE_CHARACTER, -- '\n'
+		STAR_CHARACTER, -- '*',
 		SLASH_CHARACTER, -- '/'
 		"01000101" -- 'E'
 	);
+	TYPE answer_array_4 IS ARRAY (0 TO 13) OF STD_LOGIC;
+	CONSTANT answer_4 : answer_array_4 := (
+		'0', -- '/'
+		'0', -- '*'
+		'1', -- 'B'
+		'1', -- '*'
+		'1', -- '/'
+		'0', -- '/'
+		'0', -- '*'
+		'1', -- '*'
+		'1', -- '*'
+		'1', -- 'D'
+		'1', -- '\n'
+		'1', -- '*'
+		'1', -- '/'
+		'0'  -- 'E'
+	);
 
-	TYPE mixed_comment_test_array IS ARRAY (0 TO 18) OF std_logic_vector(7 downto 0);
-	CONSTANT mix_test_vectors : mixed_comment_test_array := (
+	TYPE test_array_5 IS ARRAY (0 TO 3) OF std_logic_vector(7 downto 0);
+	CONSTANT test_vectors_5 : test_array_5 := (
+		SLASH_CHARACTER, -- '/'
+		SLASH_CHARACTER, -- '/'
+		NEW_LINE_CHARACTER, -- '\n'
+		STAR_CHARACTER -- '*'
+	);
+	TYPE answer_array_5 IS ARRAY (0 TO 3) OF STD_LOGIC;
+	CONSTANT answer_5 : answer_array_5 := (
+		'0', -- '/'
+		'0', -- '/'
+		'1', -- '\n'
+		'0' -- '*'
+	);
+
+	TYPE test_array_6 IS ARRAY (0 TO 18) OF std_logic_vector(7 downto 0);
+	CONSTANT test_vectors_6 : test_array_6 := (
 		"01000001", -- 'A'
 		SLASH_CHARACTER, -- '/'
 		SLASH_CHARACTER, -- '/'
@@ -135,78 +170,8 @@ stim_process: PROCESS
 		SLASH_CHARACTER, -- '/'
 		"01000110" -- 'F'
 	);
-
-	TYPE singel_answer_1 IS ARRAY (0 TO 5) OF STD_LOGIC;
-	CONSTANT s_answer_1 : singel_answer_1 := (
-		'0', -- '/'
-		'0', -- '/'
-		'1', -- 'A'
-		'1', -- 'B'
-		'1', -- '\n'
-		'0'  -- 'C'
-	);
-
-	TYPE singel_answer_2 IS ARRAY (0 TO 7) OF STD_LOGIC;
-	CONSTANT s_answer_2 : singel_answer_2 := (
-		'0', -- 'A'
-		'0', -- '/'
-		'0', -- 'B'
-		'0', -- '/'
-		'0', -- '/'
-		'1', -- 'C'
-		'1', -- '\n'
-		'0'  -- 'D'
-	);
-
-	TYPE singel_answer_3 IS ARRAY (0 TO 7) OF STD_LOGIC;
-	CONSTANT s_answer_3 : singel_answer_3 := (
-		'0', -- '/'
-		'0', -- '/'
-		'1', -- '*'
-		'1', -- 'A'
-		'1', -- '*'
-		'1', -- '/'
-		'1', -- '\n'
-		'0'  -- 'B'
-	);
-
-	TYPE multi_answer_1 IS ARRAY (0 TO 9) OF STD_LOGIC;
-	CONSTANT m_answer_1 : multi_answer_1 := (
-		'0', -- 'A'
-		'0', -- '/'
-		'0', -- '*'
-		'1', -- 'B'
-		'1', -- '*'
-		'1', -- '/'
-		'0', -- 'C'
-		'0', -- '/'
-		'0', -- '*'
-		'1'  -- 'D'
-	);
-
-	TYPE multi_answer_2 IS ARRAY (0 TO 16) OF STD_LOGIC;
-	CONSTANT m_answer_2 : multi_answer_2 := (
-		'0', -- '/'
-		'0', -- '*'
-		'1', -- '\n'
-		'1', -- 'A'
-		'1', -- '*'
-		'1', -- '/'
-		'0', -- '/'
-		'0', -- 'B'
-		'0', -- '*'
-		'0', -- 'C'
-		'0', -- '*'
-		'0', -- '/'
-		'0', -- '*'
-		'1', -- 'D'
-		'1', -- '*'
-		'1', -- '/'
-		'0'  -- 'E'
-	);
-
-	TYPE mixed_answer IS ARRAY (0 TO 18) OF STD_LOGIC;
-	CONSTANT mix_answer : mixed_answer := (
+	TYPE answer_array_6 IS ARRAY (0 TO 18) OF STD_LOGIC;
+	CONSTANT answer_6 : answer_array_6 := (
 		'0', -- 'A'
 		'0', -- '/'
 		'0', -- '/'
@@ -227,6 +192,29 @@ stim_process: PROCESS
 		'1', -- '/'
 		'0'  -- 'F'
 	);
+
+	TYPE test_array_7 IS ARRAY (0 TO 7) OF std_logic_vector(7 downto 0);
+	CONSTANT test_vectors_7 : test_array_7 := (
+		SLASH_CHARACTER, -- '/'
+		SLASH_CHARACTER, -- '/'
+		STAR_CHARACTER, -- '*'
+		"01000001", -- 'A'
+		STAR_CHARACTER, -- '*'
+		SLASH_CHARACTER, -- '/'
+		NEW_LINE_CHARACTER, -- '\n'
+		"01000010" -- 'B'
+	);
+	TYPE answer_array_7 IS ARRAY (0 TO 7) OF STD_LOGIC;
+	CONSTANT answer_7 : answer_array_7 := (
+		'0', -- '/'
+		'0', -- '/'
+		'1', -- '*'
+		'1', -- 'A'
+		'1', -- '*'
+		'1', -- '/'
+		'1', -- '\n'
+		'0'  -- 'B'
+	);
 BEGIN
 -- Reset the FSM
 	REPORT "Resetting the FSM";
@@ -234,12 +222,15 @@ BEGIN
 	WAIT FOR clk_period*1;
 	s_reset <= '0';
 	WAIT FOR clk_period*1;
+	ASSERT (s_output = '0')
+		REPORT "Reset failed"
+		SEVERITY ERROR;
 
 	REPORT "Start Test Case 1: Single Line Comments";
-	FOR i IN s_test_vectors_1'RANGE LOOP
-		s_input <= s_test_vectors_1(i);
+	FOR i IN test_vectors_1'RANGE LOOP
+		s_input <= test_vectors_1(i);
 		WAIT FOR 1 * clk_period;
-		ASSERT (s_output = s_answer_1(i))
+		ASSERT (s_output = answer_1(i))
 			REPORT "Test case 1 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
 	END LOOP;
@@ -248,12 +239,15 @@ BEGIN
 	WAIT FOR clk_period*1;
 	s_reset <= '0';
 	WAIT FOR clk_period*1;
-	
+	ASSERT (s_output = '0')
+		REPORT "Reset failed after test case 1"
+		SEVERITY ERROR;
+
 	REPORT "Start Test Case 2: Single Line Comments with interleaved code";
-	FOR i IN s_test_vectors_2'RANGE LOOP
-		s_input <= s_test_vectors_2(i);
+	FOR i IN test_vectors_2'RANGE LOOP
+		s_input <= test_vectors_2(i);
 		WAIT FOR 1 * clk_period;
-		ASSERT (s_output = s_answer_2(i))
+		ASSERT (s_output = answer_2(i))
 			REPORT "Test case 2 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
 	END LOOP;
@@ -264,10 +258,10 @@ BEGIN
 	WAIT FOR clk_period*1;
 
 	REPORT "Start Test Case 3: Single Line Comments";
-	FOR i IN s_test_vectors_3'RANGE LOOP
-		s_input <= s_test_vectors_3(i);
+	FOR i IN test_vectors_3'RANGE LOOP
+		s_input <= test_vectors_3(i);
 		WAIT FOR 1 * clk_period;
-		ASSERT (s_output = s_answer_3(i))
+		ASSERT (s_output = answer_3(i))
 			REPORT "Test case 3 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
 	END LOOP;
@@ -278,10 +272,10 @@ BEGIN
 	WAIT FOR clk_period*1;
 
 	REPORT "Start Test Case 4: Multi-Line Comments with interleaved code";
-	FOR i IN m_test_vectors_1'RANGE LOOP
-		s_input <= m_test_vectors_1(i);
+	FOR i IN test_vectors_4'RANGE LOOP
+		s_input <= test_vectors_4(i);
 		WAIT FOR 1 * clk_period;
-		ASSERT (s_output = m_answer_1(i))
+		ASSERT (s_output = answer_4(i))
 			REPORT "Test case 4 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
 	END LOOP;
@@ -292,10 +286,10 @@ BEGIN
 	WAIT FOR clk_period*1;
 
 	REPORT "Start Test Case 5: Complex Multi-Line Comments with interleaved code";
-	FOR i IN m_test_vectors_2'RANGE LOOP
-		s_input <= m_test_vectors_2(i);
+	FOR i IN test_vectors_5'RANGE LOOP
+		s_input <= test_vectors_5(i);
 		WAIT FOR 1 * clk_period;
-		ASSERT (s_output = m_answer_2(i))
+		ASSERT (s_output = answer_5(i))
 			REPORT "Test case 5 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
 	END LOOP;
@@ -306,11 +300,25 @@ BEGIN
 	WAIT FOR clk_period*1;
 
 	REPORT "Start Test Case 6: Mixed Comments";
-	FOR i IN mix_test_vectors'RANGE LOOP
-		s_input <= mix_test_vectors(i);
+	FOR i IN test_vectors_6'RANGE LOOP
+		s_input <= test_vectors_6(i);
 		WAIT FOR 1 * clk_period;
-		ASSERT (s_output = mix_answer(i))
+		ASSERT (s_output = answer_6(i))
 			REPORT "Test case 6 failed at index " & INTEGER'IMAGE(i)
+			SEVERITY ERROR;
+	END LOOP;
+
+	s_reset <= '1';
+	WAIT FOR clk_period*1;
+	s_reset <= '0';
+	WAIT FOR clk_period*1;
+
+	REPORT "Start Test Case 7: Multi-Line Comment followed by Single-Line Comment";
+	FOR i IN test_vectors_7'RANGE LOOP
+		s_input <= test_vectors_7(i);
+		WAIT FOR 1 * clk_period;
+		ASSERT (s_output = answer_7(i))
+			REPORT "Test case 7 failed at index " & INTEGER'IMAGE(i)
 			SEVERITY ERROR;
 	END LOOP;
 
