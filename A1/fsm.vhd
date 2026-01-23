@@ -57,6 +57,12 @@ begin
                 else
                     state <= SINGLE_C; -- E, Still inside single-line comment
                 end if;
+            when SINGLE_C => -- E, inside single-line comment
+                if input = NEW_LINE_CHARACTER then
+                    state <= END_C; -- F
+                else
+                    state <= SINGLE_C; -- E, Still inside single-line comment
+                end if;
             when MULTI_READY => -- D, '/*' detected
                 if input = STAR_CHARACTER then
                     state <= MULTI_END_READY; -- H, possible end of multi-line comment
@@ -77,7 +83,7 @@ begin
                 else
                     state <= MULTI_C; -- G, Back to inside multi-line comment
                 end if;
-            when END_C => -- End of single-line comment
+            when END_C => -- F, end of comment but still output 1
                 if input = SLASH_CHARACTER then
                     state <= READY; -- Check for new comment start
                 else
