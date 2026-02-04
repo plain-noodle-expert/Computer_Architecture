@@ -49,7 +49,7 @@ begin
         op2_3 <= op2_2;
 
         -- Stage 6: final subtraction
-        stage_final <= stage_op5 - op2_3;
+        stage_final <= op2_3 - stage_op5;
     end if;
 end process;
 

@@ -141,7 +141,7 @@ BEGIN
         n_op5 := v_op3_1 * v_op4;
         n_op2_3 := v_op2_2;
 
-        n_final := v_op5 - v_op2_3;
+        n_final := v_op2_3 - v_op5;
 
         next_valid_pipe(0) := curr_valid;
         FOR stage IN 1 TO pipe_depth - 1 LOOP
