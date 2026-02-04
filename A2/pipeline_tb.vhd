@@ -51,8 +51,8 @@ stim_process: PROCESS
 
     TYPE test_array_t IS ARRAY (natural range <>) OF test_vec_t;
     CONSTANT tests : test_array_t(0 to 5) := (
-        0 => (a => 5,  b => 7,  c => 2,  d => 3,  e => 1),
-        1 => (a => 10, b => -2, c => 1,  d => 5,  e => -3),
+        0 => (a => 1,  b => 2,  c => 3,  d => 4,  e => 5),
+        1 => (a => 5,  b => 7,  c => 2,  d => 3,  e => 1),
         2 => (a => -4, b => 9,  c => -3, d => 2,  e => 6),
         3 => (a => 8,  b => 0,  c => 4,  d => -1, e => 2),
         4 => (a => -6, b => -6, c => 3,  d => 3,  e => -2),
